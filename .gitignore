@@ -5,3 +5,4 @@ __pycache__/
 .DS_Store
 threads/
 .eve_token.json
+*.log

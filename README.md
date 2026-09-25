@@ -41,6 +41,8 @@ uv pip install --python .venv/bin/python -r requirements.txt
 ./run.sh            # starts the sidecar on localhost:8799 (first run downloads the 90MB topic model)
 ```
 
+On macOS you can skip the terminal from now on: `./sidecar/install_autostart.sh` starts the sidecar at login and restarts it if it stops (`--uninstall` removes it).
+
 Then in Chrome: `chrome://extensions` → turn on Developer mode → **Load unpacked** → choose the `extension/` folder. Check or change the shortcut at `chrome://extensions/shortcuts`.
 
 Without the sidecar the extension still works; parked threads are kept in the extension only and are sent to the sidecar once it's back.
