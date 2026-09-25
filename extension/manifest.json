@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "eve-threads",
+  "description": "Own your context window: park research threads to files on your machine and to your own memory, not your AI vendor's.",
+  "version": "0.1.0",
+  "permissions": [
+    "tabs",
+    "storage",
+    "notifications",
+    "tabGroups"
+  ],
+  "host_permissions": [
+    "http://localhost:8799/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "eve-threads",
+    "default_icon": "icon.png"
+  },
+  "icons": {
+    "128": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "park-thread": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+E",
+        "mac": "Command+Shift+E"
+      },
+      "description": "Park the current research thread"
+    },
+    "read-later": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+L",
+        "mac": "Command+Shift+L"
+      },
+      "description": "Mark this tab to read later (toggle)"
+    }
+  }
+}

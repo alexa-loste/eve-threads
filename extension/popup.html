@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <h1>eve-threads</h1>
+    <p class="tag">Own your context window.</p>
+  </header>
+
+  <section id="idle" hidden>
+    <form id="start-form">
+      <input id="thread-name" placeholder="What are you researching?" autocomplete="off" />
+      <select id="cortex" title="Eve cortex to save this thread to"></select>
+      <button type="submit">Start thread</button>
+    </form>
+  </section>
+
+  <section id="active" hidden>
+    <div class="thread-head">
+      <div>
+        <div class="label">Active thread</div>
+        <div id="active-name" class="name"></div>
+        <div id="active-meta" class="meta"></div>
+      </div>
+      <button id="park" title="Park thread (⌘⇧E)">Park ⌘⇧E</button>
+    </div>
+    <div class="label">What this extension knows about each tab</div>
+    <ul id="tabs"></ul>
+    <a href="#" id="cancel" class="link">Cancel thread</a>
+  </section>
+
+  <section id="parked-section">
+    <div class="label">Parked threads</div>
+    <ul id="parked"></ul>
+  </section>
+
+  <footer id="sidecar"></footer>
+  <script src="popup.js"></script>
+</body>
+</html>
