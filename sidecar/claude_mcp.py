@@ -34,7 +34,8 @@ def _down(e: Exception) -> str:
 
 @mcp.tool()
 def start_thread(name: str, suggested_urls: list[str] | None = None,
-                 cortex: str | None = None) -> str:
+                 cortex: str | None = None, reasons: list[str] | None = None,
+                 answer: str | None = None) -> str:
     """Start recording a research thread in the user's browser.
 
     Call this when the user starts researching a question with you, and AGAIN with a
@@ -47,13 +48,18 @@ def start_thread(name: str, suggested_urls: list[str] | None = None,
     eve_spaces lists them). Leave empty for the default "browsing" cortex. It must be
     an existing cortex name; an unknown name falls back to the default.
 
+    `reasons`: one short line per suggested URL, same order, saying why it is worth reading.
+    `answer`: your answer to the user, in markdown. It is shown on the suggestions page
+    above the sources, so they can read it and tick which ones to open.
+
     Put the sources you recommend in `suggested_urls`. They are NOT opened for the
     user: they read your answer and open what they choose. Anything they open is
     recorded, and suggestions they picked are marked as suggested by you.
     """
     try:
         r = httpx.post(f"{SIDECAR}/start",
-                       json={"name": name, "suggested_urls": suggested_urls or [], "cortex": cortex}, timeout=5)
+                       json={"name": name, "suggested_urls": suggested_urls or [], "cortex": cortex,
+                             "reasons": reasons or [], "answer": answer}, timeout=5)
         r.raise_for_status()
         data = r.json()
         go_url = data["go_url"]
@@ -74,15 +80,17 @@ def start_thread(name: str, suggested_urls: list[str] | None = None,
 
 
 @mcp.tool()
-def suggest_sources(urls: list[str]) -> str:
+def suggest_sources(urls: list[str], reasons: list[str] | None = None,
+                    answer: str | None = None) -> str:
     """Add sources you are recommending to the CURRENT research thread.
 
     Call this whenever you recommend new papers or pages during the thread, and also
-    show the user the links in your answer. They are not opened for the user. If the
+    show the user the links in your answer. `reasons`: one short line per URL, same order.
+    `answer`: your answer in markdown, shown on the suggestions page above the sources. They are not opened for the user. If the
     new sources point to a clearly different question, call start_thread instead.
     """
     try:
-        r = httpx.post(f"{SIDECAR}/suggest", json={"urls": urls}, timeout=5)
+        r = httpx.post(f"{SIDECAR}/suggest", json={"urls": urls, "reasons": reasons or [], "answer": answer}, timeout=5)
         if r.status_code == 409:
             return "No thread is recording yet. Call start_thread first."
         r.raise_for_status()
