@@ -354,7 +354,9 @@ def compose_read_cards(thread: dict) -> list[tuple[str, str, str]]:
             text += f" About: {abstract}"
         if hls:
             text += " She highlighted: " + " ".join(f'"{h}"' for h in hls)
-        cards.append((text, t["url"], title[:120], bool(abstract or hls)))
+        # Only a close read or highlights earns its own extra memory; every other source
+        # just gets its link pinned onto Eve's card (each extra memory is a slow encode).
+        cards.append((text, t["url"], title[:120], bool(hls) or status == "read"))
     return cards
 
 
